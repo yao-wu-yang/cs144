@@ -36,7 +36,7 @@ TCPReceiverMessage TCPReceiver::send( const Writer& inbound_stream ) const
     // convert from stream index to abs seqno
     // + 1 for SYN, + inbound_stream.is_closed() for FIN
     uint64_t const abs_seqno = inbound_stream.bytes_pushed() + 1 + inbound_stream.is_closed();
-    msg.ackno = Wrap32::wrap(abs_seqno, isn_.value() );
+    msg.ackno = Wrap32::wrap( abs_seqno, isn_.value() );
   }
   return msg;
 }
