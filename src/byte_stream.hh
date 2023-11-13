@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cstdint>
+#include <list>
 #include <queue>
 #include <stdexcept>
 #include <string>
 #include <string_view>
-
 class Reader;
 class Writer;
 
@@ -13,6 +14,15 @@ class ByteStream
 protected:
   uint64_t capacity_;
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
+  bool is_closed_ { false };
+  bool has_error_ { false };
+
+  uint64_t num_bytes_pushed_ { 0 };
+  uint64_t num_bytes_popped_ { 0 };
+  uint64_t num_bytes_buffered_ { 0 };
+
+  std::deque<std::string> data_queue_ {};
+  std::deque<std::string_view> view_queue_ {};
 
 public:
   explicit ByteStream( uint64_t capacity );
