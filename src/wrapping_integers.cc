@@ -12,6 +12,8 @@ Wrap32 Wrap32::wrap( uint64_t n, Wrap32 zero_point )
 
 uint64_t Wrap32::unwrap( Wrap32 zero_point, uint64_t checkpoint ) const
 {
+  (void)zero_point;
+  (void)checkpoint;
   static constexpr uint64_t TWO31 = 1UL << 31;
   static constexpr uint64_t TWO32 = 1UL << 32;
 
