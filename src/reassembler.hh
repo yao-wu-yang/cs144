@@ -6,6 +6,19 @@
 
 class Reassembler
 {
+private:
+  uint64_t first_unassembled_index_ { 0 };
+
+  std::list<std::pair<uint64_t, std::string>> buffer_ {};
+  uint64_t buffer_size_ { 0 };
+  bool has_last_ { false };
+
+  // insert valid but un-ordered data into buffer
+  void insert_into_buffer( uint64_t first_index, std::string&& data, bool is_last_substring );
+
+  // pop invalid bytes and insert valid bytes into writer
+  void pop_from_buffer( Writer& output );
+
 public:
   /*
    * Insert a new substring to be reassembled into a ByteStream.
