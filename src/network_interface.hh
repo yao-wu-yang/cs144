@@ -41,6 +41,11 @@ private:
   // IP (known as Internet-layer or network-layer) address of the interface
   Address ip_address_;
 
+  std::unordered_map<uint32_t,std::pair<EthernetAddress,size_t> >ip2ether_ {}; //ARP±í
+  std::unordered_map<uint32_t,size_t>arp_timer {};
+  std::unordered_map<size_t,std::vector<InternetDatagram>>wait_drgams {};
+  std::queue<EthernetFrame>out_frames {};
+
 public:
   // Construct a network interface with given Ethernet (network-access-layer) and IP (internet-layer)
   // addresses
