@@ -19,12 +19,15 @@ To run clang-tidy (which suggests improvements): `cmake --build build --target t
 
 To format code: `cmake --build build --target format`
 
+缩略图：
 
-缩略图：![image](https://github.com/yao-wu-yang/My_cs144/assets/115643176/e27e46a2-edea-4a1c-b417-a2035b13d948)
+![image](https://github.com/yao-wu-yang/cs144/assets/115643176/8a183b8c-8e32-4907-9163-cf52e7ced655)
+
 
 git关系：
 
-![image](https://github.com/yao-wu-yang/My_cs144/assets/115643176/64cc8667-b630-4c07-9b79-305121021c3b)
+![image](https://github.com/yao-wu-yang/cs144/assets/115643176/6ad95d7a-9f98-47e5-b27c-e29cd12953bd)
+
 
 
 实验环境：
@@ -38,5 +41,6 @@ cmake 3.27.1
 git
 
 
-<img width="701" alt="image" src="https://github.com/yao-wu-yang/My_cs144/assets/115643176/dbc8038c-14f0-4194-93ad-c57e7e3e651c">
+![image](https://github.com/yao-wu-yang/cs144/assets/115643176/4af04781-44df-4cda-8c27-39e39aa89e3c)
+
 
