@@ -25,7 +25,7 @@ using namespace std;
 // next_hop: The IP address of the next hop. Will be empty if the network is directly attached to the router (in
 //    which case, the next hop address should be the datagram's final destination).
 // interface_num: The index of the interface to send the datagram out on.
-//32位目的ip 8位可以表示256的长度
+// 32位目的ip 8位可以表示256的长度
 void Router::add_route( const uint32_t route_prefix,
                         const uint8_t prefix_length,
                         const optional<Address> next_hop,
@@ -38,9 +38,9 @@ void Router::add_route( const uint32_t route_prefix,
   (void)prefix_length;
   (void)next_hop;
   (void)interface_num;
-    routing_table_.emplace_back( route_prefix, prefix_length, next_hop, interface_num );
+  routing_table_.emplace_back( route_prefix, prefix_length, next_hop, interface_num );
 }
-//the router should forward the datagram to a particular next hop on a particular interface
+// the router should forward the datagram to a particular next hop on a particular interface
 void Router::route()
 {
   for ( auto& current_interface : interfaces_ ) {

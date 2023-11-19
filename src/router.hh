@@ -53,20 +53,20 @@ public:
 
 class Router
 {
-   struct Item
+  struct Item
   {
-     uint32_t route_prefix {};
+    uint32_t route_prefix {};
     uint8_t prefix_length {};
     std::optional<Address> next_hop;
     size_t interface_num {};
   };
   // The router's collection of network interfaces
   std::vector<AsyncNetworkInterface> interfaces_ {};
-  
+
 public:
-std::vector<Router::Item>routing_table_ {};
-  std::vector<Router::Item>::iterator longest_prefix_match_ (uint32_t dis_ip);
-  static int match_length_(uint32_t src_ip,uint32_t dis_ip,uint8_t len);
+  std::vector<Router::Item> routing_table_ {};
+  std::vector<Router::Item>::iterator longest_prefix_match_( uint32_t dis_ip );
+  static int match_length_( uint32_t src_ip, uint32_t dis_ip, uint8_t len );
   // Add an interface to the router
   // interface: an already-constructed network interface
   // returns the index of the interface after it has been added to the router
