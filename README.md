@@ -19,6 +19,9 @@ To run clang-tidy (which suggests improvements): `cmake --build build --target t
 
 To format code: `cmake --build build --target format`
 
+ps:由于课程网站目前无法访问，所以我将课程的讲义一并打包到仓库中了。
+
+
 缩略图：
 
 ![image](https://github.com/yao-wu-yang/cs144/assets/115643176/8a183b8c-8e32-4907-9163-cf52e7ced655)
