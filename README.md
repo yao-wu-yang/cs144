@@ -19,7 +19,7 @@ To run clang-tidy (which suggests improvements): `cmake --build build --target t
 
 To format code: `cmake --build build --target format`
 
-ps:由于课程网站目前无法访问，所以我将课程的讲义一并打包到仓库中了。
+ps: 由于课程网站目前无法访问，所以我将课程的讲义一并打包到仓库中了。(2023/12/13)
 
 
 缩略图：
