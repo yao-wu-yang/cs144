@@ -15,7 +15,7 @@ void Writer::push( string data )
   if ( n < data.size() ) {
     data = data.substr( 0, n );
   }
-  data_queue_.push_back( std::move( data ) );
+  data_queue_.push_back( std::move( data ) );//使用move避免深拷贝，只是将字符串的所有权转移到队列中
   view_queue_.emplace_back( data_queue_.back().c_str(), n );
   num_bytes_buffered_ += n;
   num_bytes_pushed_ += n;

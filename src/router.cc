@@ -10,15 +10,14 @@
 using namespace std;
 //本地转发表
 /***********************************/
-/* 首部                   输出     */
-/* 0100                   3        */
-/* 0110                   2        */
-/* 0111                   2        */
-/* 1001                   1        */
-/*                                 */
-/*                                 */
+/* 首部 ? ? ? ? ? ? ? ? ? 输出 ? ? */
+/* 0100 ? ? ? ? ? ? ? ? ? 3 ? ? ? ?*/
+/* 0110 ? ? ? ? ? ? ? ? ? 2 ? ? ? ?*/
+/* 0111 ? ? ? ? ? ? ? ? ? 2 ? ? ? ?*/
+/* 1001 ? ? ? ? ? ? ? ? ? 1 ? ? ? ?*/
+/* ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? */
+/* ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? */
 /***********************************/
-
 // route_prefix: The "up-to-32-bit" IPv4 address prefix to match the datagram's destination address against
 // prefix_length: For this route to be applicable, how many high-order (most-significant) bits of
 //    the route_prefix will need to match the corresponding bits of the datagram's destination address?
