@@ -7,7 +7,7 @@
 class TCPReceiver
 {
 private:
-  std::optional<Wrap32> isn_ {};
+  std::optional<Wrap32> isn_ {}; //用于存储TCP链接的初始序号ISN
 
 public:
   /*

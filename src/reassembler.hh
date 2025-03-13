@@ -9,14 +9,14 @@ class Reassembler
 private:
   uint64_t first_unassembled_index_ { 0 };
 
-  std::list<std::pair<uint64_t, std::string>> buffer_ {};
+  std::list<std::pair<uint64_t, std::string>> buffer_ {}; //用来保存失序的字节,不能包含重叠数据，相当于接受方使用TCP协议存储了失序的包
   uint64_t buffer_size_ { 0 };
   bool has_last_ { false };
 
   // insert valid but un-ordered data into buffer
   void insert_into_buffer( uint64_t first_index, std::string&& data, bool is_last_substring );
 
-  // pop invalid bytes and insert valid bytes into writer
+  // pop invalid bytes and insert valid bytes into writer !!!
   void pop_from_buffer( Writer& output );
 
 public:
@@ -25,7 +25,7 @@ public:
    *   `first_index`: the index of the first byte of the substring
    *   `data`: the substring itself
    *   `is_last_substring`: this substring represents the end of the stream
-   *   `output`: a mutable reference to the Writer
+   *   `output`: a mutable reference to the Writer //接受方一侧的进程从这里提取相应的数据
    *
    * The Reassembler's job is to reassemble the indexed substrings (possibly out-of-order
    * and possibly overlapping) back into the original ByteStream. As soon as the Reassembler

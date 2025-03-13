@@ -32,19 +32,19 @@
 // the network interface passes it up the stack. If it's an ARP
 // request or reply, the network interface processes the frame
 // and learns or replies as necessary.
-class NetworkInterface
+class NetworkInterface //??????????
 {
 private:
   // Ethernet (known as hardware, network-access, or link-layer) address of the interface
-  EthernetAddress ethernet_address_;
+  EthernetAddress ethernet_address_;  //??????????
 
   // IP (known as Internet-layer or network-layer) address of the interface
-  Address ip_address_;
+  Address ip_address_;  //?????IP??
 
-  std::unordered_map<uint32_t, std::pair<EthernetAddress, size_t>> ip2ether_ {}; // ARP±í
-  std::unordered_map<uint32_t, size_t> arp_timer {};
-  std::unordered_map<size_t, std::vector<InternetDatagram>> wait_drgams {};
-  std::queue<EthernetFrame> out_frames {};
+  std::unordered_map<uint32_t, std::pair<EthernetAddress, size_t>> ip2ether_ {}; // ARP?? 
+  std::unordered_map<uint32_t, size_t> arp_timer {}; //????ARP?????
+  std::unordered_map<size_t, std::vector<InternetDatagram>> wait_drgams {}; //???????IP???
+  std::queue<EthernetFrame> out_frames {}; //???????????
 
 public:
   // Construct a network interface with given Ethernet (network-access-layer) and IP (internet-layer)
@@ -65,8 +65,8 @@ public:
   // If type is IPv4, returns the datagram.
   // If type is ARP request, learn a mapping from the "sender" fields, and send an ARP reply.
   // If type is ARP reply, learn a mapping from the "sender" fields.
-  std::optional<InternetDatagram> recv_frame( const EthernetFrame& frame );
+  std::optional<InternetDatagram> recv_frame( const EthernetFrame& frame ); //???????????
 
   // Called periodically when time elapses
-  void tick( size_t ms_since_last_tick );
+  void tick( size_t ms_since_last_tick ); //??????????? ARP ???
 };

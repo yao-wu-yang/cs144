@@ -10,7 +10,7 @@
 using namespace std;
 //本地转发表
 /***********************************/
-/* 首部 ? ? ? ? ? ? ? ? ? 输出 ? ? */
+/* 首部 ***************** 输出 *** */
 /* 0100 ? ? ? ? ? ? ? ? ? 3 ? ? ? ?*/
 /* 0110 ? ? ? ? ? ? ? ? ? 2 ? ? ? ?*/
 /* 0111 ? ? ? ? ? ? ? ? ? 2 ? ? ? ?*/
@@ -43,10 +43,10 @@ void Router::add_route( const uint32_t route_prefix,
 void Router::route()
 {
   for ( auto& current_interface : interfaces_ ) {
-    auto received_dgram = current_interface.maybe_receive();
+    auto received_dgram = current_interface.maybe_receive(); //找一下路由器中现在收到的有哪些数据包
     if ( received_dgram.has_value() ) {
       auto& dgram = received_dgram.value();
-      if ( dgram.header.ttl > 1 ) {
+      if ( dgram.header.ttl > 1 ) { //等于1的话直接丢弃了
         dgram.header.ttl--;
         dgram.header.compute_checksum();
         auto dst_ip = dgram.header.dst;
@@ -54,6 +54,7 @@ void Router::route()
         if ( it != routing_table_.end() ) {
           auto& target_interface = interface( it->interface_num );
           target_interface.send_datagram( dgram, it->next_hop.value_or( Address::from_ipv4_numeric( dst_ip ) ) );
+           //如果路由表项中指定了下一跳地址，则使用该地址；否则，使用目标 IP 地址作为下一跳(这种情况可能是直联)
         }
       }
     }

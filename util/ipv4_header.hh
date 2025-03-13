@@ -38,9 +38,9 @@ struct IPv4Header
   uint8_t hlen = LENGTH / 4; // header length (multiples of 32 bits)
   uint8_t tos = 0;           // type of service
   uint16_t len = 0;          // total length of packet
-  uint16_t id = 0;           // identification number
-  bool df = true;            // don't fragment flag
-  bool mf = false;           // more fragments flag
+  uint16_t id = 0;           // identification number 标识符
+  bool df = true;            // don't fragment flag 分片
+  bool mf = false;           // more fragments flag 
   uint16_t offset = 0;       // fragment offset field
   uint8_t ttl = DEFAULT_TTL; // time to live field
   uint8_t proto = PROTO_TCP; // protocol field

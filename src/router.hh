@@ -12,7 +12,7 @@
 // implementation of NetworkInterface.
 class AsyncNetworkInterface : public NetworkInterface
 {
-  std::queue<InternetDatagram> datagrams_in_ {};
+  std::queue<InternetDatagram> datagrams_in_ {}; //存储接收到的数据报
 
 public:
   using NetworkInterface::NetworkInterface;
@@ -51,33 +51,33 @@ public:
 // A router that has multiple network interfaces and
 // performs longest-prefix-match routing between them.
 
-class Router
+class Router   //路由器就是转发+匹配的操作
 {
   struct Item
-  {
-    uint32_t route_prefix {};
-    uint8_t prefix_length {};
-    std::optional<Address> next_hop;
-    size_t interface_num {};
+  {   //路由器的表项
+    uint32_t route_prefix {}; //路由前缀
+    uint8_t prefix_length {}; //前缀长度
+    std::optional<Address> next_hop; //下一跳路由地址
+    size_t interface_num {}; //网络接口的索引标签
   };
   // The router's collection of network interfaces
-  std::vector<AsyncNetworkInterface> interfaces_ {};
+  std::vector<AsyncNetworkInterface> interfaces_ {}; //存储路由器的网络接口
 
 public:
-  std::vector<Router::Item> routing_table_ {};
-  std::vector<Router::Item>::iterator longest_prefix_match_( uint32_t dis_ip );
-  static int match_length_( uint32_t src_ip, uint32_t dis_ip, uint8_t len );
+  std::vector<Router::Item> routing_table_ {}; //路由表 vector模拟 
+  std::vector<Router::Item>::iterator longest_prefix_match_( uint32_t dis_ip ); //根据目标 IP 地址，在路由表中查找最长前缀匹配的表项。
+  static int match_length_( uint32_t src_ip, uint32_t dis_ip, uint8_t len ); //计算两个 IP 地址的前缀匹配长度。
   // Add an interface to the router
   // interface: an already-constructed network interface
   // returns the index of the interface after it has been added to the router
-  size_t add_interface( AsyncNetworkInterface&& interface )
+  size_t add_interface( AsyncNetworkInterface&& interface ) //添加一个网络接口到路由器 返回添加后的接口索引。
   {
     interfaces_.push_back( std::move( interface ) );
     return interfaces_.size() - 1;
   }
 
   // Access an interface by index
-  AsyncNetworkInterface& interface( size_t N ) { return interfaces_.at( N ); }
+  AsyncNetworkInterface& interface( size_t N ) { return interfaces_.at( N ); } //直接访问索引为n的接口
 
   // Add a route (a forwarding rule)
   void add_route( uint32_t route_prefix,

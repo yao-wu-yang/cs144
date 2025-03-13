@@ -9,7 +9,7 @@ using namespace std;
 //如果未使用固定的初始序列号，就生成一个随机的序列号
 TCPSender::TCPSender( uint64_t initial_RTO_ms, optional<Wrap32> fixed_isn )
   : isn_( fixed_isn.value_or( Wrap32 { random_device()() } ) ), initial_RTO_ms_( initial_RTO_ms )
-{}
+{} //optional语法
 
 uint64_t TCPSender::sequence_numbers_in_flight() const
 {
@@ -46,17 +46,20 @@ void TCPSender::push( Reader& outbound_stream )
 {
   // Your code here.
   (void)outbound_stream;
-  size_t currwindow_size = window_size == 0 ? 1 : window_size;
-  while ( outstanding_cnt < currwindow_size ) {
+  size_t currwindow_size = window_size == 0 ? 1 : window_size; //窗口为0的话调整为1
+  while ( outstanding_cnt < currwindow_size ) { //只要正在传输但尚未确认的字节数（outstanding_cnt）小于当前窗口大小（currwindow_size），就继续发送数据。
+    //有数据能发的情况下发的越多越好
+    
     TCPSenderMessage message;
     //如果第一次建立连接
     if ( !SYN_ ) {
-      SYN_ = message.SYN = true;
+      SYN_ = message.SYN = true; //表示发送SYN包
       outstanding_cnt++;
     }
 
     message.seqno = Wrap32::wrap( next_seqno, isn_ );
-    auto const payload_size = min( TCPConfig::MAX_PAYLOAD_SIZE, currwindow_size - outstanding_cnt );
+    auto const payload_size = min( TCPConfig::MAX_PAYLOAD_SIZE, currwindow_size - outstanding_cnt ); //
+
     //从输出缓冲区中读出payload_size大小的数据并释放相应大小的缓冲区空间
     read( outbound_stream, payload_size, message.payload );
     outstanding_cnt += message.payload.size();
@@ -70,13 +73,14 @@ void TCPSender::push( Reader& outbound_stream )
     /*A segment that occupies no sequence numbers (no payload, SYN, or FIN) doesn’t need
      to be remembered or retransmitted.
     */
+   //如果消息的序列号长度为 0（即没有有效载荷、SYN 或 FIN），则退出循环。这种消息不需要被记住或重传。
     if ( message.sequence_length() == 0 ) {
       break;
     }
 
     queue_segments.push_back( message );
     next_seqno += message.sequence_length();
-    outstanding_segments.push_back( message );
+    outstanding_segments.push_back( message );//保存一下副本
     //此时终止连接并且输出缓冲区为空
     if ( message.FIN && outbound_stream.bytes_buffered() == 0 ) {
       break;
@@ -84,13 +88,13 @@ void TCPSender::push( Reader& outbound_stream )
   }
 }
 
-TCPSenderMessage TCPSender::send_empty_message() const
+TCPSenderMessage TCPSender::send_empty_message() const // 用于探测接受方的窗口状态或者保持连接活跃
 {
   // Your code here.
   auto seqno = Wrap32::wrap( next_seqno, isn_ );
   return { seqno, false, {}, false };
 }
-
+//只有在收到ACK的时候才考虑清除发送方所保存的数据报副本
 void TCPSender::receive( const TCPReceiverMessage& msg )
 {
   // Your code here.
@@ -98,7 +102,7 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
   window_size = msg.window_size;
   if ( msg.ackno.has_value() ) {
     auto ackno = msg.ackno.value().unwrap( isn_, next_seqno );
-    //收到的ACK大于期望的 说明已经成功接受数据 不需要重传
+    //无效的ACK 超过了将要发送的下一个字节号(impossible)
     if ( ackno > next_seqno ) {
       return;
     }
@@ -111,7 +115,7 @@ void TCPSender::receive( const TCPReceiverMessage& msg )
       if ( temp.seqno.unwrap( isn_, next_seqno ) + temp.sequence_length() <= ack_seqno ) {
         outstanding_cnt -= temp.sequence_length();
         outstanding_segments.pop_front();
-        timer_.reset_RTO();
+        timer_.reset_RTO(); //更新计时器，因为这些数据包已经被接受了，不需要重传计时了
         if ( !outstanding_segments.empty() ) {
           timer_.start();
         }
@@ -131,10 +135,10 @@ void TCPSender::tick( const size_t ms_since_last_tick )
 {
   // Your code here.
   (void)ms_since_last_tick;
-  timer_.tick( ms_since_last_tick );
+  timer_.tick( ms_since_last_tick ); //这里的ms_since_last_tick应该是提前根据公式计算了
   if ( timer_.is_expire() ) {
     //此时需要重传最小序号的报文
-    queue_segments.push_back( outstanding_segments.front() );
+    queue_segments.push_back( outstanding_segments.front() ); //优先重传最早超时的报文
     if ( window_size != 0 ) {
       ++retransmit_cnt;
       timer_.double_RTO();
@@ -142,3 +146,4 @@ void TCPSender::tick( const size_t ms_since_last_tick )
     timer_.start();
   }
 }
+
